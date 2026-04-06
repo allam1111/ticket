@@ -21,9 +21,4 @@ if (firebase.storage) {
   const storage = firebase.storage();
 }
 
-// Securely persist login status on the device
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-  .then(() => console.log("Persistence set to LOCAL (Stay Signed In enabled)"))
-  .catch((e) => console.error("Persistence failed: " + e.message));
-
 console.log("Firebase initialized successfully! System ready with Auth Support.");
