@@ -133,7 +133,7 @@
                 firebase.auth().signInWithEmailAndPassword(email, pass)
                     .then((userCredential) => {
                         localStorage.setItem("m-admin", "ok");
-                        window.location.href = 'dashboard.html';
+                        window.location.href = 'dashboard.html?m-admin=ok';
                     })
                     .catch((error) => {
                         alert("Login failed: " + error.message);

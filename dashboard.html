@@ -118,7 +118,7 @@
             <h3>إعدادات الموقع - تحكم شامل</h3>
             <label>لون الهيدر:</label><input type="color" id="cfg-color" value="#004d87">
             <div class="grid">
-                <div><label>حجم العنوان (px):</label><input type="number" id="cfg-ts" value="32"></div>
+                <div><label>حجم العنوان (px):</label><input type="number" id="cfg-ts" value="24"></div>
                 <div><label>حجم النص (px):</label><input type="number" id="cfg-bs" value="15"></div>
             </div>
             <button class="btn" style="background:#27ae60" onclick="saveGlobalCfg()">حفظ الإعدادات العامة</button>
@@ -126,8 +126,13 @@
     </div>
 
     <script>
-        if (localStorage.getItem("m-admin") !== "ok") {
+        const params = new URLSearchParams(window.location.search);
+        const isAdminCheck = params.get("m-admin") === "ok" || localStorage.getItem("m-admin") === "ok";
+
+        if (!isAdminCheck) {
             window.location.href = 'admin_login.html';
+        } else {
+            localStorage.setItem("m-admin", "ok"); // Keep it saved if possible
         }
 
         function showTab(id, el) {

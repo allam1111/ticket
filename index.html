@@ -24,8 +24,8 @@
             --s: #123c5b;
             --w: #ffffff;
             --bg: #ffffff;
-            --t-size: 32px;
-            --b-size: 15px;
+            --t-size: 17px;
+            --b-size: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -40,19 +40,19 @@
 
         /* --- MAIN APP --- */
         #main-app { display: none; flex-direction: column; height: 100vh; }
-        .header-container { background-color: var(--p); width: 100%; padding: 25px 20px; color: white; font-family: 'Fredoka', sans-serif; position: sticky; top: 0; z-index: 1000; }
-        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header-container { background-color: var(--p); width: 100%; padding: 12px 16px; color: white; font-family: 'Fredoka', sans-serif; position: sticky; top: 0; z-index: 1000; }
+        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .user-info { display: flex; align-items: center; gap: 15px; }
-        .avatar-container { width: 35px; height: 35px; border-radius: 50%; overflow: hidden; background-color: var(--s); display: flex; align-items: center; justify-content: center; }
+        .avatar-container { width: 30px; height: 30px; border-radius: 50%; overflow: hidden; background-color: var(--s); display: flex; align-items: center; justify-content: center; }
         .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
         .title { font-size: var(--t-size); margin: 0; font-weight: 500; letter-spacing: 0.5px; }
         .icons { display: flex; gap: 20px; align-items: center;}
-        .icon-svg { width: 28px; height: 28px; stroke: white; stroke-width: 2; fill: none; }
+        .icon-svg { width: 18px; height: 18px; stroke: white; stroke-width: 2; fill: none; }
         .bottom-row { display: flex; justify-content: space-between; align-items: center; }
         .switch-box { background-color: var(--s); border-radius: 50px; display: flex; overflow: hidden; }
-        .btn { border: none; font-family: inherit; font-size: 20px; padding: 8px 25px; cursor: pointer; background: transparent; color: white; }
+        .btn { border: none; font-family: inherit; font-size: 12px; padding: 4px 14px; cursor: pointer; background: transparent; color: white; }
         .btn.active { background-color: var(--w); color: #000; border-radius: 50px; font-weight: 600; }
-        .filter-btn { background-color: var(--s); color: white; border-radius: 50px; font-size: 20px; padding: 8px 25px; border: none;}
+        .filter-btn { background-color: var(--s); color: white; border-radius: 50px; font-size: 12px; padding: 4px 14px; border: none;}
 
         .email-list-container { flex-grow: 1; overflow-y: auto; background: var(--bg); padding-bottom: 80px; -webkit-overflow-scrolling: touch; }
         .email-card { display: flex; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; align-items: flex-start; text-decoration: none; cursor: pointer; }
@@ -141,7 +141,10 @@
         });
 
         document.getElementById('btn-do-login').onclick = () => {
-            firebase.auth().signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-pass').value);
+            firebase.auth().signInWithEmailAndPassword(document.getElementById('login-email').value, document.getElementById('login-pass').value)
+            .catch(error => {
+                alert("Login failed: " + error.message);
+            });
         };
 
         function loadProfilePhoto(email) {
@@ -165,11 +168,11 @@
                             <div class="avatar-circle" style="background:${m.inbox.avatarColor}">${m.inbox.avatar}</div>
                             <div style="flex:1; overflow:hidden;">
                                 <div style="display:flex; justify-content:space-between; font-family:'Fredoka';">
-                                    <p style="font-weight:700; font-size:16px;">${m.inbox.sender}</p>
-                                    <span style="font-size:12px; color:#666;">${m.inbox.time}</span>
+                                    <p style="font-weight:700; font-size:14px;">${m.inbox.sender}</p>
+                                    <span style="font-size:10px; color:#666;">${m.inbox.time}</span>
                                 </div>
                                 <p class="row-2">${m.inbox.subject}</p>
-                                <p style="color:#555; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px;">${m.inbox.snippet}</p>
+                                <p style="color:#555; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:var(--b-size);">${m.inbox.snippet}</p>
                             </div></div>`;
                     }
                 });
@@ -185,7 +188,7 @@
             const enteredEmail = prompt("يرجى كتابة الإيميل الخاص بك للتأكيد والوصول للوحة التحكم:"); 
             if(enteredEmail && enteredEmail.trim().toLowerCase() === user.email.toLowerCase()) {
                 localStorage.setItem("m-admin", "ok");
-                location.href = 'dashboard.html';
+                location.href = 'dashboard.html?m-admin=ok';
             } else if(enteredEmail) {
                 alert("الإيميل غير متطابق!");
             }
