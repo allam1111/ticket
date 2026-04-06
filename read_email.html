@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Meta tags for PWA/App Behavior -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" id="pwa-theme-color" content="#004d87">
+    <title>out look | View Email</title>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-blue: #004d87;
+            --dark-blue: #123c5b;
+            --white: #ffffff;
+            --text-black: #201F1E;
+            --gray-sub: #605E5C;
+            --border-light: #EDEBE9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background-color: #ffffff; font-family: 'Inter', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden;}
+
+        /* --- STICKY NAV HEADER --- */
+        .nav-header {
+            background-color: var(--bg-blue);
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+        .back-btn { cursor: pointer; display: flex; align-items: center;}
+
+        /* --- EMAIL CONTENT SCROLLABLE --- */
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* --- MM TEMPLATE STYLE (DARK THEME FROM USER FILE) --- */
+        .mm-container {
+            background-color: #141414;
+            color: #dddddd;
+            padding: 40px;
+            font-family: sans-serif;
+            min-height: 100%;
+        }
+
+        .mm-order-label { font-size: 7px; color: #999999; margin-bottom: 2px; }
+        .mm-order-id { font-size: 11px; font-weight: 700; color: #dddddd; margin-bottom: 10px; }
+        .mm-hr { border: 0; border-top: 1px solid #333333; margin: 10px 0; }
+        .mm-greeting { font-size: 8px; font-weight: 500; color: #dddddd; margin-bottom: 8px; }
+        .mm-details { font-size: 8px; color: #bbbbbb; line-height: 1.6; margin-bottom: 15px; }
+        .mm-bold { color: #dddddd; font-weight: 700; }
+        .mm-btn { 
+            display: inline-block; 
+            background-color: #5a3359; 
+            color: #ffffff; 
+            padding: 8px 25px; 
+            border-radius: 4px; 
+            text-decoration: none; 
+            font-weight: 500; 
+            font-size: 10px; 
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* --- SENDER BAR OVERLAY (OPTIONAL) --- */
+        .top-sender-bar {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .avatar-small { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; font-weight: bold; }
+        .sender-name-small { font-weight: 700; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY HEADER -->
+    <div class="nav-header" id="dyn-header">
+        <div class="back-btn" onclick="window.location.href='index.html'">
+            <svg style="width:24px; height:24px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </div>
+        <div style="font-weight:600; font-size:18px;">Message</div>
+    </div>
+
+    <!-- SENDER INFO BAR -->
+    <div class="top-sender-bar">
+        <div class="avatar-small" id="dyn-avatar" style="background:#004d87">G</div>
+        <div class="sender-name-small" id="dyn-sender">Galala University</div>
+    </div>
+
+    <!-- MAIN SCROLLABLE CONTENT -->
+    <div class="content-scroll" id="content-container">
+        
+        <!-- MM TEMPLATE CONTAINER -->
+        <div class="mm-container" id="mm-view">
+            <!-- Header Table Content -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                   <div class="mm-order-label">Your Sale Order Inherit</div>
+                   <div class="mm-order-id" id="mm-ref">Ref S233450</div>
+                </div>
+                <img src="https://image2url.com/r2/default/images/1774993530887-38fb83f5-f115-4fe7-817c-9a03f64294e3.png" width="70">
+            </div>
+
+            <hr class="mm-hr">
+
+            <!-- Body Message -->
+            <p class="mm-greeting">Hello <span id="mm-name">يوسف اسامه عوض محسوب مصلحي</span>,</p>
+            <p class="mm-details">
+                Your ticket <span class="mm-bold" id="mm-ref-inline">S233450</span> amounting in <span class="mm-bold" id="mm-price">160.0000 EGP</span>, scheduled at
+                <span class="mm-bold" id="mm-date">02/04/2026</span>, Pickup: <span class="mm-bold" id="mm-pickup">مسجد نبي الله</span>, Drop Off: <span class="mm-bold" id="mm-dropoff">جامعة الجلالة</span> has been confirmed.
+            </p>
+
+            <p style="font-size: 8px; color: #dddddd; margin-bottom: 5px;">Thank you for your trust!</p>
+            <p style="font-size: 8px; color: #999999;">Do not hesitate to contact us if you have any questions.</p>
+
+            <!-- Action Button -->
+            <div style="text-align:center;">
+                <a href="#" class="mm-btn" id="mm-download-btn">View Sale Order Inherit</a>
+            </div>
+
+            <hr class="mm-hr">
+
+            <footer style="font-size:7px; color:#aaaaaa;">
+                <span>info@gu.edu.eg</span> | <span>https://erp.gu.edu.eg/</span>
+            </footer>
+        </div>
+
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailId = urlParams.get('id');
+
+        // --- THEME SYNC ---
+        firebase.database().ref('siteSettings/theme').on('value', (snap) => {
+            const theme = snap.val();
+            if (theme) {
+                document.getElementById('dyn-header').style.backgroundColor = theme.headerColor;
+                document.getElementById('pwa-theme-color').content = theme.headerColor;
+            }
+        });
+
+        // --- FETCH DATA ---
+        if (emailId) {
+            firebase.database().ref('emails/' + emailId).once('value', (snapshot) => {
+                const mail = snapshot.val();
+                if (mail) {
+                    // Update Top Bar
+                    document.getElementById('dyn-sender').innerText = mail.inbox.sender;
+                    document.getElementById('dyn-avatar').innerText = mail.inbox.avatar;
+
+                    // Update MM Template Fields
+                    document.getElementById('mm-name').innerText = mail.content.displayName;
+                    document.getElementById('mm-ref').innerText = "Ref " + mail.content.ref;
+                    document.getElementById('mm-ref-inline').innerText = mail.content.ref;
+                    document.getElementById('mm-price').innerText = mail.content.price + " EGP";
+                    document.getElementById('mm-date').innerText = mail.content.date;
+                    document.getElementById('mm-pickup').innerText = mail.content.pickup;
+                    document.getElementById('mm-dropoff').innerText = mail.content.dropoff;
+
+                    // File Link
+                    if(mail.content.attachmentUrl) {
+                        const btn = document.getElementById('mm-download-btn');
+                        btn.innerText = mail.content.attachmentName || "View Sale Order Inherit";
+                        btn.onclick = () => window.open(mail.content.attachmentUrl, '_blank');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

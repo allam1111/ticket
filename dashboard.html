@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Control Hub 👑</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        :root { --main: #004d87; --bg: #f8f9fa; --sidebar: #0b1d2e; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui; }
+        body { background: var(--bg); display: flex; height: 100vh; overflow: hidden; }
+
+        .sidebar { width: 260px; background: var(--sidebar); color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .sidebar h2 { font-size: 18px; padding-bottom: 20px; border-bottom: 1px solid #334155; text-align: center; }
+        .nav-link { padding: 12px 15px; border-radius: 8px; cursor: pointer; color: #94a3b8; transition: 0.3s; font-size: 14px; }
+        .nav-link.active { background: var(--main); color: white; }
+
+        .content { flex: 1; padding: 30px; overflow-y: auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); display: none; }
+        .card.active { display: block; }
+
+        label { display: block; margin: 15px 0 5px; font-weight: 600; font-size: 13px; color: #475569; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .section-title { color: var(--main); font-size: 16px; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
+        .btn { background: var(--main); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
+        
+        .line-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; background: #f8fafc; padding: 10px; border-radius: 8px; }
+        .line-item input[type="text"] { flex: 1; }
+        .line-item input[type="color"] { width: 50px; height: 35px; border: none; background: none; cursor: pointer; }
+        
+        .log-item { padding: 15px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .badge { background: #e2e8f0; padding: 4px 10px; border-radius: 12px; font-size: 11px; color: #1e293b; font-weight: 600; }
+        .btn-del { background: #fee2e2; color: #ef4444; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>لوحة إرسال الرسائل 👑</h2>
+        <div class="nav-link active" onclick="showTab('tab-send', this)">🚀 إرسال محتوى</div>
+        <div class="nav-link" onclick="showTab('tab-history', this)">📜 سجل الرسائل المرسلة</div>
+        <div class="nav-link" onclick="showTab('tab-settings', this)">🛠️ إعدادات الموقع</div>
+    </div>
+
+    <div class="content">
+        <!-- 🚀 TAB: SEND CONTENT -->
+        <div id="tab-send" class="card active">
+            <p class="section-title">أولاً: ظهور الرسالة من الخارج (في القائمة)</p>
+            <div class="grid">
+                <div>
+                    <label>المستلم:</label>
+                    <select id="m-target">
+                        <option value="yoa200156@gu.edu.eg">yoa200156@gu.edu.eg</option>
+                        <option value="mwa204655@gu.edu.eg">mwa204655@gu.edu.eg</option>
+                        <option value="mea400479@gu.edu.eg">mea400479@gu.edu.eg</option>
+                        <option value="ahe501011@gu.edu.eg">ahe501011@gu.edu.eg</option>
+                        <option value="all">كل الحسابات</option>
+                    </select>
+                </div>
+                <div><label>اسم المرسل:</label><input type="text" id="m-sender" value="Galala University"></div>
+            </div>
+            <div class="grid">
+                <div><label>الحرف الأول للأيقونة:</label><input type="text" id="m-pfp" value="G" maxlength="1"></div>
+                <div><label>لون الأيقونة:</label><input type="color" id="m-pfp-clr" value="#004d87"></div>
+            </div>
+            <label>موضوع الرسالة (من الخارج):</label><input type="text" id="m-subject" placeholder="مثال: تأكيد حجز تذكرتك">
+            <label>وصف مختصر (Snippet):</label><textarea id="m-snippet" placeholder="ماذا سيظهر للمستخدم في المعاينة؟"></textarea>
+
+            <p class="section-title" style="margin-top:30px;">ثانياً: محتوى الرسالة (داخلياً)</p>
+            <label>نوع التصميم:</label>
+            <select id="m-type" onchange="toggleInputs()">
+                <option value="ticket">🎫 تذكرة MM رسمية</option>
+                <option value="text">✍️ نص ملون سطر بسطر</option>
+            </select>
+
+            <div id="ui-ticket" style="display:block; margin-top:15px; border:1px solid #e2e8f0; padding:15px; border-radius:10px;">
+                <label>اسم المسافر:</label><input type="text" id="tk-name" value="يوسف اسامه عوض">
+                <div class="grid">
+                    <div><label>رقم الـ Ref:</label><input type="text" id="tk-ref" value="S233450"></div>
+                    <div><label>السعر:</label><input type="text" id="tk-price" value="160.0000"></div>
+                </div>
+                <div class="grid">
+                    <div><label>التاريخ:</label><input type="text" id="tk-date" value="02/04/2026"></div>
+                    <div><label>اسم الملف (PDF):</label><input type="text" id="tk-fname" value="Ticket.pdf"></div>
+                </div>
+                <label>رفع ملف PDF الحقيقي:</label><input type="file" id="tk-file">
+            </div>
+
+            <div id="ui-text" style="display:none; margin-top:15px; border:1px solid #dcfce7; padding:15px; border-radius:10px; background:#f0fdf4;">
+                <div id="lines-container">
+                    <div class="line-item line-entry">
+                        <input type="text" class="l-t" placeholder="اكتب السطر هنا...">
+                        <input type="color" class="l-c" value="#333333">
+                    </div>
+                </div>
+                <button onclick="addLine()" style="margin-top:10px; padding:5px 10px; cursor:pointer;">+ إضافة سطر آخر</button>
+            </div>
+
+            <button class="btn" onclick="sendToUser()">🚀 نـشـر حـي الآن</button>
+        </div>
+
+        <!-- 📜 TAB: HISTORY -->
+        <div id="tab-history" class="card">
+            <h3>سجل جميع الرسائل المرسلة لكل إيميل</h3>
+            <div id="history-box" style="margin-top:20px;"></div>
+        </div>
+
+        <!-- 🛠️ TAB: SETTINGS -->
+        <div id="tab-settings" class="card">
+            <h3>إعدادات الموقع - تحكم شامل</h3>
+            <label>لون الهيدر:</label><input type="color" id="cfg-color" value="#004d87">
+            <div class="grid">
+                <div><label>حجم العنوان (px):</label><input type="number" id="cfg-ts" value="32"></div>
+                <div><label>حجم النص (px):</label><input type="number" id="cfg-bs" value="15"></div>
+            </div>
+            <button class="btn" style="background:#27ae60" onclick="saveGlobalCfg()">حفظ الإعدادات العامة</button>
+        </div>
+    </div>
+
+    <script>
+        function showTab(id, el) {
+            document.querySelectorAll('.card, .nav-link').forEach(x => x.classList.remove('active'));
+            document.getElementById(id).classList.add('active'); el.classList.add('active');
+            if(id === 'tab-history') fetchHistory();
+        }
+
+        function toggleInputs() {
+            const type = document.getElementById('m-type').value;
+            document.getElementById('ui-ticket').style.display = (type === 'ticket' ? 'block' : 'none');
+            document.getElementById('ui-text').style.display = (type === 'text' ? 'block' : 'none');
+        }
+
+        function addLine() {
+            const div = document.createElement('div');
+            div.className = 'line-item line-entry';
+            div.innerHTML = `<input type="text" class="l-t" placeholder="محتوى السطر..."><input type="color" class="l-c" value="#000000"><button onclick="this.parentElement.remove()" style="color:red; border:none; background:none; cursor:pointer;">X</button>`;
+            document.getElementById('lines-container').appendChild(div);
+        }
+
+        async function sendToUser() {
+            const type = document.getElementById('m-type').value;
+            const target = document.getElementById('m-target').value;
+            let finalContent = { type: type };
+
+            if(type === 'ticket') {
+                const f = document.getElementById('tk-file').files[0];
+                let fURL = "";
+                if(f) { const r = firebase.storage().ref('p/'+Date.now()); await r.put(f); fURL = await r.getDownloadURL(); }
+                finalContent = { ...finalContent, displayName: document.getElementById('tk-name').value, ref: document.getElementById('tk-ref').value, price: document.getElementById('tk-price').value, date: document.getElementById('tk-date').value, attachmentName: document.getElementById('m-fname').value, attachmentUrl: fURL };
+            } else {
+                const lns = []; document.querySelectorAll('.line-entry').forEach(i => lns.push({ text: i.querySelector('.l-t').value, color: i.querySelector('.l-c').value }));
+                finalContent.lines = lns;
+            }
+
+            const data = {
+                target: target,
+                inbox: { 
+                    sender: document.getElementById('m-sender').value, 
+                    avatar: document.getElementById('m-pfp').value, 
+                    avatarColor: document.getElementById('m-pfp-clr').value,
+                    subject: document.getElementById('m-subject').value,
+                    snippet: document.getElementById('m-snippet').value,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                },
+                content: finalContent,
+                timestamp: Date.now()
+            };
+
+            await firebase.database().ref('emails/').push(data);
+            alert("تم الإرسال لـ " + target); location.reload();
+        }
+
+        function fetchHistory() {
+            firebase.database().ref('emails/').on('value', snap => {
+                const box = document.getElementById('history-box'); box.innerHTML = "";
+                const val = snap.val(); if(!val) return;
+                Object.keys(val).reverse().forEach(k => {
+                    const m = val[k];
+                    box.innerHTML += `<div class="log-item">
+                        <div><span class="badge">${m.target}</span> <strong>${m.inbox.subject}</strong></div>
+                        <button class="btn-del" onclick="deleteMail('${k}')">حذف</button>
+                    </div>`;
+                });
+            });
+        }
+        function deleteMail(id) { if(confirm("حذف؟")) firebase.database().ref('emails/' + id).remove(); }
+        
+        function saveGlobalCfg() {
+            firebase.database().ref('siteSettings/v2/theme').set({ headerColor: document.getElementById('cfg-color').value, titleSize: document.getElementById('cfg-ts').value, bodySize: document.getElementById('cfg-bs').value })
+            .then(() => alert("تم الحفظ"));
+        }
+    </script>
+</body>
+</html>

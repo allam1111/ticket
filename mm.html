@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale Order Confirmation - Galala University</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --primary-color: #dddddd;
+            --secondary-color: #999999;
+            --accent-color: #5a3359;
+            /* Reference image purple */
+            --accent-hover: #754273;
+            --border-color: #333333;
+            --bg-color: #141414;
+            --footer-bg: #141414;
+            --text-muted: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0d0d0d;
+            color: var(--primary-color);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .container {
+            background-color: var(--bg-color);
+            width: 100%;
+            max-width: 900px;
+            padding: 60px 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .order-info {
+            text-align: left;
+        }
+
+        .order-label {
+            font-size: 7px;
+            color: var(--secondary-color);
+            margin-bottom: 1px;
+        }
+
+        .order-id {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            height: 30px;
+            object-fit: contain;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 8px 0;
+        }
+
+        .content {
+            margin: 10px 0;
+        }
+
+        .greeting {
+            font-size: 8px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .details {
+            font-size: 8px;
+            color: #bbbbbb;
+            margin-bottom: 10px;
+        }
+
+        .details strong {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .closing {
+            font-size: 8px;
+            margin-bottom: 6px;
+        }
+
+        .contact {
+            font-size: 8px;
+            color: var(--secondary-color);
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            padding: 6px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        footer {
+            margin-top: 5px;
+            font-size: 6px;
+        }
+
+        .university-info {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 6px;
+            margin-bottom: 1px;
+        }
+
+        .contact-links {
+            margin-bottom: 3px;
+            color: #777777;
+        }
+
+        .contact-links a {
+            color: #aaaaaa;
+            text-decoration: none;
+        }
+
+        .contact-links span {
+            margin: 0 2px;
+            color: #333333;
+        }
+
+        .powered-by {
+            text-align: center;
+            background-color: #0d0d0d;
+            padding: 3px;
+            margin: 15px -40px -60px -40px;
+            font-size: 6px;
+            color: #444444;
+        }
+
+        .powered-by a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" style="background-color: #141414; color: #dddddd; max-width: 900px; width: 100%; margin: 0 auto; padding: 40px; font-family: sans-serif;">
+        <!-- Header Table -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px; border-collapse: collapse;">
+            <tr>
+                <td align="left" valign="middle">
+                    <div class="order-label" style="font-size: 7px !important; color: #999999; margin-bottom: 1px; font-family: sans-serif;">Your Sale Order Inherit</div>
+                    <div class="order-id" style="font-size: 11px !important; font-weight: 700; color: #dddddd; font-family: sans-serif;">Ref S233450</div>
+                </td>
+                <td align="right" valign="middle">
+                    <img src="https://image2url.com/r2/default/images/1774993530887-38fb83f5-f115-4fe7-817c-9a03f64294e3.png"
+                        alt="logo" width="80" style="display: block; width: 80px; height: auto;" />
+                </td>
+            </tr>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid #333333; margin: 8px 0;">
+
+        <!-- Content Section -->
+        <div class="content" style="margin: 10px 0; font-family: sans-serif;">
+            <p class="greeting" style="font-size: 8px !important; margin-bottom: 6px; font-weight: 500; color: #dddddd;">Hello يوسف اسامه عوض محسوب مصلحي,</p>
+            <p class="details" style="font-size: 8px !important; color: #bbbbbb; margin-bottom: 10px;">
+                Your ticket <strong style="color: #dddddd; font-size: 8px !important;">S233450</strong> amounting in <strong style="color: #dddddd; font-size: 8px !important;">160.0000 EGP</strong> , scheduled at
+                <strong style="color: #dddddd; font-size: 8px !important;">02/04/2026</strong> , Pickup: <strong style="color: #dddddd; font-size: 8px !important;">مسجد نبي الله</strong> , Drop Off: <strong style="color: #dddddd; font-size: 8px !important;">جامعة الجلالة</strong> has been confirmed.
+            </p>
+            <p class="closing" style="font-size: 8px !important; margin-bottom: 6px; color: #dddddd;">Thank you for your trust!</p>
+            <p class="contact" style="font-size: 8px !important; color: #999999;">Do not hesitate to contact us if you have any questions.</p>
+        </div>
+
+        <!-- Button Section -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 20px 0;">
+            <tr>
+                <td align="center">
+                    <a href="#" class="btn" style="display: inline-block; background-color: #5a3359; color: #ffffff; padding: 6px 20px; border-radius: 4px; text-decoration: none; font-weight: 500; font-size: 10px !important; font-family: sans-serif;">View Sale Order Inherit</a>
+                </td>
+            </tr>
+        </table>
+
+        <hr style="border: 0; border-top: 1px solid #333333; margin: 8px 0;">
+
+        <!-- Footer Section -->
+        <footer>
+            <div class="contact-links" align="left" style="font-size: 7px !important; color: #777777; font-family: sans-serif; line-height: 1;">
+                <span style="font-size: 7px !important; color: #444444;">|</span> 
+                <a href="mailto:info@gu.edu.eg" style="font-size: 7px !important; color: #aaaaaa; text-decoration: none;"><span style="font-size: 7px !important; color: #aaaaaa;">info@gu.edu.eg</span></a> 
+                <span style="font-size: 7px !important; color: #444444;">|</span> 
+                <a href="https://erp.gu.edu.eg/" target="_blank" style="font-size: 7px !important; color: #aaaaaa; text-decoration: none;"><span style="font-size: 7px !important; color: #aaaaaa;">https://erp.gu.edu.eg/</span></a>
+            </div>
+        </footer>
+
+        <!-- Powered By Section -->
+        <div class="powered-by" align="center" style="font-size: 7px !important; color: #444444; margin-top: 10px; font-family: sans-serif; line-height: 1;">
+            <span style="font-size: 7px !important; color: #444444;">Powered by </span><a href="https://www.odoo.com" target="_blank" style="font-size: 7px !important; color: #5a3359; text-decoration: none; font-weight: 600;"><span style="font-size: 7px !important; color: #5a3359;">Odoo</span></a>
+        </div>
+    </div>
+</body>
+
+</html>
