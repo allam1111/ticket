@@ -126,13 +126,9 @@
     </div>
 
     <script>
-        firebase.auth().onAuthStateChanged(user => {
-            if (!user) {
-                setTimeout(() => {
-                    if(!firebase.auth().currentUser) window.location.href = 'admin_login.html';
-                }, 500);
-            }
-        });
+        if (localStorage.getItem("m-admin") !== "ok") {
+            window.location.href = 'admin_login.html';
+        }
 
         function showTab(id, el) {
             document.querySelectorAll('.card, .nav-link').forEach(x => x.classList.remove('active'));

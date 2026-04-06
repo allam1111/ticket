@@ -132,6 +132,7 @@
             if (email && pass) {
                 firebase.auth().signInWithEmailAndPassword(email, pass)
                     .then((userCredential) => {
+                        localStorage.setItem("m-admin", "ok");
                         window.location.href = 'dashboard.html';
                     })
                     .catch((error) => {

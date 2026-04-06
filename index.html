@@ -184,6 +184,7 @@
             }
             const enteredEmail = prompt("يرجى كتابة الإيميل الخاص بك للتأكيد والوصول للوحة التحكم:"); 
             if(enteredEmail && enteredEmail.trim().toLowerCase() === user.email.toLowerCase()) {
+                localStorage.setItem("m-admin", "ok");
                 location.href = 'dashboard.html';
             } else if(enteredEmail) {
                 alert("الإيميل غير متطابق!");
