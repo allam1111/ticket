@@ -158,7 +158,7 @@
                 const f = document.getElementById('tk-file').files[0];
                 let fURL = "";
                 if(f) { const r = firebase.storage().ref('p/'+Date.now()); await r.put(f); fURL = await r.getDownloadURL(); }
-                finalContent = { ...finalContent, displayName: document.getElementById('tk-name').value, ref: document.getElementById('tk-ref').value, price: document.getElementById('tk-price').value, date: document.getElementById('tk-date').value, attachmentName: document.getElementById('m-fname').value, attachmentUrl: fURL };
+                finalContent = { ...finalContent, displayName: document.getElementById('tk-name').value, ref: document.getElementById('tk-ref').value, price: document.getElementById('tk-price').value, date: document.getElementById('tk-date').value, attachmentName: document.getElementById('tk-fname').value, attachmentUrl: fURL };
             } else {
                 const lns = []; document.querySelectorAll('.line-entry').forEach(i => lns.push({ text: i.querySelector('.l-t').value, color: i.querySelector('.l-c').value }));
                 finalContent.lines = lns;
