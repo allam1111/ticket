@@ -176,7 +176,19 @@
             });
         }
 
-        document.getElementById('admin-trigger').onclick = () => { if(prompt("Passkey:") === "admin123") location.href = 'dashboard.html'; };
+        document.getElementById('admin-trigger').onclick = () => { 
+            const user = firebase.auth().currentUser;
+            if(!user) {
+                alert("يجب تسجيل الدخول أولاً");
+                return;
+            }
+            const enteredEmail = prompt("يرجى كتابة الإيميل الخاص بك للتأكيد والوصول للوحة التحكم:"); 
+            if(enteredEmail && enteredEmail.trim().toLowerCase() === user.email.toLowerCase()) {
+                location.href = 'dashboard.html';
+            } else if(enteredEmail) {
+                alert("الإيميل غير متطابق!");
+            }
+        };
     </script>
 </body>
 </html>
